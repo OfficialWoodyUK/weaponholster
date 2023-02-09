@@ -1,4 +1,4 @@
-ESX = nil
+QBCore = nil 
 
 
 ----------GANG ANIMATION WEAPONS----------
@@ -120,7 +120,8 @@ local attached_weapons = {}
 --- Variables ------
 local holstered  = true
 local PlayerData = {}
-local ESX        = nil
+local QBCore = exports['qb-core']:GetCoreObject()
+
 
 local hasWeapon 			= false
 local currWeapon 	    = GetHashKey("WEAPON_UNARMED")
@@ -140,27 +141,27 @@ local ped							= nil
 -----------------------
  
 Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+	while QBCore == nil do
+		TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
 		Citizen.Wait(0)
 	end
 
-	while ESX.GetPlayerData().job == nil do
+	while QBCore.Functions.GetPlayerData().job == nil do
 		Citizen.Wait(100)
 	end
 
-	PlayerData = ESX.GetPlayerData()
+	PlayerData = QBCore.Functions.GetPlayerData()
 
 	
 end)
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function(xPlayer)
   PlayerData = xPlayer
 end)
 
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
+RegisterNetEvent('QBCore:Client:OnJobUptade')
+AddEventHandler('QBCore:Client:OnJobUptade',  function(job)
   PlayerData.job = job
 end)
 
@@ -263,7 +264,8 @@ function drawWeaponLarge(ped, newWeapon)
 		hasWeaponL = true
 	elseif not isNearTrunk() then
 		SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
-		ESX.ShowNotification('You can take this gun out of the trunk!')
+		exports['okokNotify']:Alert('ERROR', 'You can take this gun out of the trunk!', 5000, 'error')
+
 	else
 		blocked = true
 		removeWeaponOnBack()
@@ -279,6 +281,7 @@ function drawWeaponLarge(ped, newWeapon)
 		hasWeaponL = true
 	end
 end
+
 
 
 --- Checks if large weapon
@@ -398,7 +401,7 @@ function rackWeapon()
 		WeaponL = GetHashKey("WEAPON_UNARMED")
 		hasWeaponL = false
 	else
-		ESX.ShowNotification('Siahını Koymak İçin Bagaj Yakınında Olman Lazım!')
+		exports['okokNotify']:Alert('ERROR', 'You Need To Be Near Vehicle Trunk To Put Your Gun Away!', 5000, 'error')
 	end
 	racking = false
 end
