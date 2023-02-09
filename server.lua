@@ -1,3 +1,3 @@
-ESX = nil
+QBCore = nil 
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
